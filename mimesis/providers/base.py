@@ -11,7 +11,6 @@ from mimesis.exceptions import NonEnumerableError
 from mimesis.locales import Locale, validate_locale
 from mimesis.random import Random, get_random_item
 from mimesis.types import JSON, Seed
-import random
 __all__ = ["BaseDataProvider", "BaseProvider"]
 
 
@@ -30,8 +29,11 @@ class BaseProvider:
         :param seed: Seed for random.
             When set to `None` the current system time is used.
         """
-        self.random = random
+        self.random = Random()
         self.seed = None
+        if seed != None:
+            self.seed = seed
+            self.random.seed(seed)
 
     def reseed(self, seed: Seed = None) -> None:
         """Reseed the internal random generator.
@@ -197,7 +199,8 @@ class BaseDataProvider(BaseProvider):
             finally:
                 self._override_locale(origin_locale)
         except AttributeError:
-            raise ValueError(f"«{self.__class__.__name__}» has not locale dependent")
+            raise ValueError(
+                f"«{self.__class__.__name__}» has not locale dependent")
 
     def __str__(self) -> str:
         """Human-readable representation of locale."""

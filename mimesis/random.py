@@ -14,13 +14,18 @@ import uuid
 __all__ = ["Random", "get_random_item", "random"]
 
 
-class Random(random_module.Random):
+class Random:
+        
     """Custom class for the possibility of extending.
 
     The class is a subclass of the class :py:class:`random.Random`
     from the module random of the standard library, which provides the custom methods.
 
     """
+
+    def __init__(self):
+        for k, v in random_module.__dict__.items():
+            setattr(self, k, v)
 
     def randints(self, amount: int = 3, a: int = 1, b: int = 100) -> t.List[int]:
         """Generate list of random integers.
@@ -36,7 +41,7 @@ class Random(random_module.Random):
 
         return [int(self.random() * (b - a)) + a for _ in range(amount)]
 
-    @staticmethod
+    @ staticmethod
     def urandom(size: int = 8) -> bytes:
         """Return a bytes object containing random bytes.
 
