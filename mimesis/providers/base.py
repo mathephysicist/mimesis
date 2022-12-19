@@ -11,7 +11,7 @@ from mimesis.exceptions import NonEnumerableError
 from mimesis.locales import Locale, validate_locale
 from mimesis.random import Random, get_random_item
 from mimesis.types import JSON, Seed
-
+import random
 __all__ = ["BaseDataProvider", "BaseProvider"]
 
 
@@ -30,9 +30,8 @@ class BaseProvider:
         :param seed: Seed for random.
             When set to `None` the current system time is used.
         """
-        self.seed = seed
-        self.random = Random()
-        self.reseed(seed)
+        self.random = random
+        self.seed = None
 
     def reseed(self, seed: Seed = None) -> None:
         """Reseed the internal random generator.
