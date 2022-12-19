@@ -14,8 +14,8 @@ import uuid
 __all__ = ["Random", "get_random_item", "random"]
 
 
-class Random:
-        
+class Random(random_module.Random):
+
     """Custom class for the possibility of extending.
 
     The class is a subclass of the class :py:class:`random.Random`
@@ -23,9 +23,13 @@ class Random:
 
     """
 
-    def __init__(self):
-        for k, v in random_module.__dict__.items():
-            setattr(self, k, v)
+    def __init__(self, seed=None, isolated=False):
+        if not isolated:
+            for k, v in random_module.__dict__.items():
+                setattr(self, k, v)
+
+        if seed != None:
+            self.reseed(seed)
 
     def randints(self, amount: int = 3, a: int = 1, b: int = 100) -> t.List[int]:
         """Generate list of random integers.

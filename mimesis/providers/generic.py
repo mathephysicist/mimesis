@@ -55,9 +55,9 @@ DEFAULT_PROVIDERS = (
 class Generic(BaseProvider):
     """Class which contain all providers at one."""
 
-    def __init__(self, locale: Locale = Locale.DEFAULT, seed: Seed = None) -> None:
+    def __init__(self, locale: Locale = Locale.DEFAULT, seed: Seed = None, isolated = False) -> None:
         """Initialize attributes lazily."""
-        super().__init__(seed=seed)
+        super().__init__(isolated=isolated,seed=seed)
         self.locale = locale
 
         for provider in DEFAULT_PROVIDERS:

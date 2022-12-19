@@ -32,6 +32,7 @@ class BaseField:
         self,
         locale: Locale = Locale.DEFAULT,
         seed: Seed = None,
+        isolated = False,
         providers: t.Optional[t.Sequence[t.Any]] = None,
     ) -> None:
         """Initialize field.
@@ -39,7 +40,7 @@ class BaseField:
         :param locale: Locale
         :param seed: Seed for random.
         """
-        self._gen = Generic(locale, seed)
+        self._gen = Generic(locale, seed, isolated)
 
         if providers:
             self._gen.add_providers(*providers)
