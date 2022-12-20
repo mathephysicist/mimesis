@@ -55,11 +55,11 @@ DEFAULT_PROVIDERS = (
 class Generic(BaseProvider):
     """Class which contain all providers at one."""
 
-    def __init__(self, locale: Locale = Locale.DEFAULT, seed: Seed = None, isolated = False) -> None:
+    def __init__(self, locale: Locale = Locale.DEFAULT, seed: Seed = None, isolated=False) -> None:
         """Initialize attributes lazily."""
-        super().__init__(isolated=isolated,seed=seed)
+        super().__init__(isolated=isolated, seed=seed)
         self.locale = locale
-
+        self.isolated = isolated
         for provider in DEFAULT_PROVIDERS:
             name = getattr(provider.Meta, "name")  # type: ignore
 
@@ -67,7 +67,8 @@ class Generic(BaseProvider):
             if issubclass(provider, BaseDataProvider):
                 setattr(self, f"_{name}", provider)
             elif issubclass(provider, BaseProvider):
-                setattr(self, name, provider(seed=self.seed))
+                setattr(self, name, provider(
+                    seed=self.seed, isolated=isolated))
 
     class Meta:
         """Class for metadata."""
@@ -85,6 +86,7 @@ class Generic(BaseProvider):
             self.__dict__[attrname] = attribute(
                 self.locale,
                 self.seed,
+                self.isolated,
             )
             return self.__dict__[attrname]
 
@@ -146,8 +148,11 @@ class Generic(BaseProvider):
 
             if "seed" in kwargs:
                 kwargs.pop("seed")
-
-            setattr(self, name, cls(seed=self.seed, **kwargs))
+            if "isolated" in kwargs:
+                kwargs.pop("isolated")
+                
+            setattr(self, name, cls(seed=self.seed,
+                    isolated=self.isolated, **kwargs))
         else:
             raise TypeError("The provider must be a class")
 

@@ -30,6 +30,7 @@ class BaseProvider:
             When set to `None` the current system time is used.
         """
         self.random = Random(seed= seed, isolated = isolated)
+        self.isolated = isolated
         self.seed = None
         if seed != None:
             self.reseed(seed)

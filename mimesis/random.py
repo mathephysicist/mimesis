@@ -31,6 +31,7 @@ class Random(random_module.Random):
         else:
             super().__init__(seed)
 
+        self.isolated = isolated
         if seed != None:
             self.seed(seed)
 
