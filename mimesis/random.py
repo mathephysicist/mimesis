@@ -29,7 +29,7 @@ class Random(random_module.Random):
                 setattr(self, k, v)
 
         if seed != None:
-            self.reseed(seed)
+            self.seed(seed)
 
     def randints(self, amount: int = 3, a: int = 1, b: int = 100) -> t.List[int]:
         """Generate list of random integers.

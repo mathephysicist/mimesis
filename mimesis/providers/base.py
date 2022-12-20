@@ -20,7 +20,7 @@ class BaseProvider:
     class Meta:
         name: str
 
-    def __init__(self, *, seed: Seed = None, **kwargs: t.Any) -> None:
+    def __init__(self, *, seed: Seed = None,isolated=None, **kwargs: t.Any) -> None:
         """Initialize attributes.
 
         Keep in mind, that locale-independent data providers will work
@@ -29,7 +29,7 @@ class BaseProvider:
         :param seed: Seed for random.
             When set to `None` the current system time is used.
         """
-        self.random = Random()
+        self.random = Random(seed= seed, isolated = isolated)
         self.seed = None
         if seed != None:
             self.reseed(seed)
@@ -72,13 +72,13 @@ class BaseProvider:
 class BaseDataProvider(BaseProvider):
     """This is a base class for all data providers."""
 
-    def __init__(self, locale: Locale = Locale.DEFAULT, seed: Seed = None) -> None:
+    def __init__(self, locale: Locale = Locale.DEFAULT, seed: Seed = None, isolated=None) -> None:
         """Initialize attributes for data providers.
 
         :param locale: Current locale.
         :param seed: Seed to all the random functions.
         """
-        super().__init__(seed=seed)
+        super().__init__(seed=seed, isolated=isolated)
         self._data: JSON = {}
         self._datafile: str = ""
         self._setup_locale(locale)
