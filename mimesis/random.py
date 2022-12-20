@@ -24,14 +24,17 @@ class Random(random_module.Random):
     """
 
     def __init__(self, seed=None, isolated=False):
+        super().__init__(seed)
         if not isolated:
             for k, v in random_module.__dict__.items():
                 setattr(self, k, v)
+        else:
+            super().__init__(seed)
 
         if seed != None:
             self.seed(seed)
 
-    def randints(self, amount: int = 3, a: int = 1, b: int = 100) -> t.List[int]:
+    def randints(self, amount: int=3, a: int=1, b: int=100) -> t.List[int]:
         """Generate list of random integers.
 
         :param amount: Amount of elements.
@@ -46,7 +49,7 @@ class Random(random_module.Random):
         return [int(self.random() * (b - a)) + a for _ in range(amount)]
 
     @ staticmethod
-    def urandom(size: int = 8) -> bytes:
+    def urandom(size: int=8) -> bytes:
         """Return a bytes object containing random bytes.
 
         :param size: The size of byte object.
@@ -54,7 +57,7 @@ class Random(random_module.Random):
         """
         return os.urandom(size)
 
-    def generate_string(self, str_seq: str, length: int = 10) -> str:
+    def generate_string(self, str_seq: str, length: int=10) -> str:
         """Generate random string created from string sequence.
 
         :param str_seq: String sequence of letters or digits.
@@ -63,7 +66,7 @@ class Random(random_module.Random):
         """
         return "".join(self.choices(str_seq, k=length))
 
-    def custom_code(self, mask: str = "@###", char: str = "@", digit: str = "#") -> str:
+    def custom_code(self, mask: str="@###", char: str="@", digit: str="#") -> str:
         """Generate custom code using ascii uppercase and random integers.
 
         :param mask: Mask of code.
@@ -71,8 +74,8 @@ class Random(random_module.Random):
         :param digit: Placeholder for digits.
         :return: Custom code.
         """
-        char_code = ord(char)
-        digit_code = ord(digit)
+        char_code=ord(char)
+        digit_code=ord(digit)
 
         if char_code == digit_code:
             raise ValueError(
@@ -80,22 +83,22 @@ class Random(random_module.Random):
             )
 
         def random_int(a: int, b: int) -> int:
-            b = b - a
+            b=b - a
             return int(self.random() * b) + a
 
-        _mask = mask.encode()
-        code = bytearray(len(_mask))
+        _mask=mask.encode()
+        code=bytearray(len(_mask))
         for i, p in enumerate(_mask):
             if p == char_code:
-                a = random_int(65, 91)  # A-Z
+                a=random_int(65, 91)  # A-Z
             elif p == digit_code:
-                a = random_int(48, 58)  # 0-9
+                a=random_int(48, 58)  # 0-9
             else:
-                a = p
-            code[i] = a
+                a=p
+            code[i]=a
         return code.decode()
 
-    def uniform(self, a: float, b: float, precision: int = 15) -> float:
+    def uniform(self, a: float, b: float, precision: int=15) -> float:
         """Get a random number in the range [a, b) or [a, b] depending on rounding.
 
         :param a: Minimum value.
@@ -105,7 +108,7 @@ class Random(random_module.Random):
         """
         return round(a + (b - a) * self.random(), precision)
 
-    def randstr(self, unique: bool = False, length: t.Optional[int] = None) -> str:
+    def randstr(self, unique: bool=False, length: t.Optional[int]=None) -> str:
         """Generate random string value.
 
         This method can be especially useful when you need to generate
@@ -122,13 +125,13 @@ class Random(random_module.Random):
             return str(uuid.uuid4().hex)
 
         if length is None:
-            length = self.randint(16, 128)
+            length=self.randint(16, 128)
 
-        characters = string.ascii_letters + string.digits
+        characters=string.ascii_letters + string.digits
         return "".join(self.choices(characters, k=length))
 
 
-def get_random_item(enum: t.Any, rnd: t.Optional[Random] = None) -> t.Any:
+def get_random_item(enum: t.Any, rnd: t.Optional[Random]=None) -> t.Any:
     """Get random item of enum object.
 
     :param enum: Enum object.
@@ -142,4 +145,4 @@ def get_random_item(enum: t.Any, rnd: t.Optional[Random] = None) -> t.Any:
 
 # Compat
 # See: https://github.com/lk-geimfari/mimesis/issues/469
-random = Random()
+random=Random()
