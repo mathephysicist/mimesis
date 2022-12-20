@@ -31,9 +31,7 @@ class BaseProvider:
         """
         self.random = Random(seed= seed, isolated = isolated)
         self.isolated = isolated
-        self.seed = None
-        if seed != None:
-            self.reseed(seed)
+        self.seed = seed
 
     def reseed(self, seed: Seed = None) -> None:
         """Reseed the internal random generator.
